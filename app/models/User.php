@@ -20,7 +20,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	protected $fillable = ['nickname', 'username', 'password'];
 	
-
+	public $rules = ['username' => 'required',
+		   	         'nickname' => 'required',
+			         'password' => 'required'
+			        ];
+	public $errors;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -31,5 +35,20 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function articles()
 	{
 		return $this->hasMany('Article');
+	}
+
+
+	public function isValid()
+	{
+		$validation = Validator::make($this->attributes, $this->rules);
+
+		if ($validation->passes()) 
+			{
+				return true;
+			}
+
+		$this->errors = $validation->messages();
+
+		return false;
 	}
 }
