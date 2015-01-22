@@ -24,7 +24,7 @@ class UsersController extends BaseController
 		{
 			return Redirect::back()->withInput()->withErrors($this->user->errors);
 		}
-
+		$this->user->password = Hash::make($this->user->password);
 		$this->user->save();
 
 		return Redirect::route('users.index');
